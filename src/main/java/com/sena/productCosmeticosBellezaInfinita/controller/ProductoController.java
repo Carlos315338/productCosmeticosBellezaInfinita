@@ -20,13 +20,13 @@ public class ProductoController {
     private ProductoService productoService;
 
     @GetMapping("/productos")
-    public ResponseEntity<Page<ProductoDTO>> listarProductos(
+    public ResponseEntity<ApiResponse<Page<ProductoDTO>>> listarProductos(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "idProducto") String orden
     ) {
         Page<ProductoDTO> productos = productoService.listarProductos(page, size, orden);
-        return ResponseEntity.ok( productos);
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", productos) );
     }
 
 }
