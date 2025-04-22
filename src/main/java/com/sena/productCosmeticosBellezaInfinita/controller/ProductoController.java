@@ -2,7 +2,6 @@ package com.sena.productCosmeticosBellezaInfinita.controller;
 
 import com.sena.productCosmeticosBellezaInfinita.dto.ApiResponse;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProductoDTO;
-import com.sena.productCosmeticosBellezaInfinita.entity.Producto;
 import com.sena.productCosmeticosBellezaInfinita.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
