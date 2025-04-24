@@ -11,4 +11,5 @@ public interface ProveedorService {
 
     public List<ProveedorSelectDTO> obtenerProveedoresParaSelect();
     public Page<ProveedorDTO> obtenerProveedores(int page, int size);
+    public String eliminarProveedor(String id);
 }

@@ -1,6 +1,5 @@
 package com.sena.productCosmeticosBellezaInfinita.dto;
 
-import com.sena.productCosmeticosBellezaInfinita.entity.Categoria;
 import lombok.*;
 
 import java.math.BigDecimal;
