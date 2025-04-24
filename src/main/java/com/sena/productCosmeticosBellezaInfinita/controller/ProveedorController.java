@@ -35,16 +35,12 @@ public class ProveedorController {
             @RequestParam(defaultValue = "5") int size) {
 
         Page<ProveedorDTO> proveedores = proveedorService.obtenerProveedores(page, size);
-
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", proveedores));
-
     }
-@DeleteMapping("/{id}")
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> listarProveedores(@PathVariable String id) {
-
         String message = proveedorService.eliminarProveedor(id);
-
         return ResponseEntity.ok(ApiResponse.ok(message));
-
     }
 }
