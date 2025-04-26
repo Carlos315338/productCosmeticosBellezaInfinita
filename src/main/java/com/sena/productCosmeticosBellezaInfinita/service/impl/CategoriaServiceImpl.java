@@ -22,4 +22,9 @@ public class CategoriaServiceImpl implements CategoriaService {
     public List<CategoriaSelectDTO> obtenerProveedoresParaSelect() {
         return proveedorMapper.listCategoriaToCategoriaSelectDTO(proveedorRepository.findAll());
     }
+
+    @Override
+    public Long obtenerCantidadCategoria() {
+        return proveedorRepository.count();
+    }
 }

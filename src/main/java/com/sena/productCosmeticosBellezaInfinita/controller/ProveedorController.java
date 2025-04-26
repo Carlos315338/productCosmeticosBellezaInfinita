@@ -38,6 +38,12 @@ public class ProveedorController {
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", proveedores));
     }
 
+    @GetMapping("/cantidadProveedores")
+    public ResponseEntity<ApiResponse<Long>> obtenerCantidadProveedores() {
+        Long cantidadProveedores = proveedorService.obtenerCantidadProveedores();
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", cantidadProveedores) );
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> listarProveedores(@PathVariable String id) {
         String message = proveedorService.eliminarProveedor(id);

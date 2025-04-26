@@ -41,6 +41,12 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public Long obtenerCantidadProductos() {
+        return productoRepository.count();
+    }
+
+
+    @Override
     public String eliminarProduto(String id) {
         try {
 

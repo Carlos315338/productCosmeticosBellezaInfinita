@@ -30,6 +30,12 @@ public class ProductoController {
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", productos) );
     }
 
+    @GetMapping("/cantidadProductos")
+    public ResponseEntity<ApiResponse<Long>> obtenerCantidadProductos() {
+        Long cantidadProductos = productoService.obtenerCantidadProductos();
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", cantidadProductos) );
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse<Void>> eliminarProducto(@PathVariable String id){
         String eliminacion = productoService.eliminarProduto(id);

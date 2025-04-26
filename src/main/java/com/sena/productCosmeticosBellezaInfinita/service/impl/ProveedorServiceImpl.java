@@ -55,4 +55,9 @@ public class ProveedorServiceImpl implements ProveedorService {
         }
     }
 
+    @Override
+    public Long obtenerCantidadProveedores() {
+        return proveedorRepository.count();
+    }
+
 }
