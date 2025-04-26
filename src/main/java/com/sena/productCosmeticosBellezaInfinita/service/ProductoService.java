@@ -8,5 +8,4 @@ public interface ProductoService {
     public Page<ProductoDTO> listarProductos(int page, int size, String orden);
     public String eliminarProduto(String id);
     public Long obtenerCantidadProductos();
-
 }

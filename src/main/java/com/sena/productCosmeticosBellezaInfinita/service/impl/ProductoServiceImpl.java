@@ -45,7 +45,6 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.count();
     }
 
-
     @Override
     public String eliminarProduto(String id) {
         try {
