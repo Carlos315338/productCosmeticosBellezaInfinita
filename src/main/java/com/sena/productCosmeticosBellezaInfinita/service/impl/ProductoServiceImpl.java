@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.sena.productCosmeticosBellezaInfinita.dto.ProductoDTO;
+import com.sena.productCosmeticosBellezaInfinita.dto.ProductoFiltroDTO;
 import com.sena.productCosmeticosBellezaInfinita.entity.Producto;
 import com.sena.productCosmeticosBellezaInfinita.mapper.ProductoMapper;
 import com.sena.productCosmeticosBellezaInfinita.repository.ProductoRepository;
@@ -23,21 +25,27 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoMapper productoMapper;
-
+    
     @Override
-    public Page<ProductoDTO> listarProductos(int page, int size, String orden) {
+    public Page<ProductoDTO> listarProductos(ProductoFiltroDTO filtro) {
 
-        Page<Producto> productosPage = productoRepository
-                .findAll(PageRequest.of(page, size, Sort.by(orden).ascending()));
-        List<Producto> content = productosPage.getContent();
-        List<ProductoDTO> productoDTOS = productoMapper.listProductoToListProductoDTO(content);
+        Sort sort = "desc".equalsIgnoreCase(filtro.getSortOrder())
+                ? Sort.by(filtro.getSortField()).descending()
+                : Sort.by(filtro.getSortField()).ascending();
 
-        Page<ProductoDTO> dtoPage = new PageImpl<>(
-                productoDTOS,
-                PageRequest.of(page, size),
-                productosPage.getTotalElements());
+        Pageable pageable = PageRequest.of(filtro.getPage(), filtro.getSize(), sort);
 
-        return dtoPage;
+        Page<Producto> productosPage;
+
+        if (filtro.getNombre() != null && !filtro.getNombre().trim().isEmpty()) {
+            productosPage = productoRepository.findByNombreContainingIgnoreCase(filtro.getNombre(), pageable);
+        } else {
+            productosPage = productoRepository.findAll(pageable);
+        }
+
+        List<ProductoDTO> productoDTOS = productoMapper.listProductoToListProductoDTO(productosPage.getContent());
+
+        return new PageImpl<>(productoDTOS, pageable, productosPage.getTotalElements());
     }
 
     @Override
