@@ -1,8 +1,9 @@
 package com.sena.productCosmeticosBellezaInfinita.controller;
 
 import com.sena.productCosmeticosBellezaInfinita.dto.ApiResponse;
+import com.sena.productCosmeticosBellezaInfinita.dto.PaginacionFiltroDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProductoDTO;
-import com.sena.productCosmeticosBellezaInfinita.dto.ProductoFiltroDTO;
+import com.sena.productCosmeticosBellezaInfinita.dto.ProductoUpdateDTO;
 import com.sena.productCosmeticosBellezaInfinita.service.ProductoService;
 
 import jakarta.validation.Valid;
@@ -19,14 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/producto")
+@RequestMapping("producto")
 public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
 
     @PostMapping("/productos")
-    public ResponseEntity<ApiResponse<Page<ProductoDTO>>> listarProductos(@Valid @RequestBody ProductoFiltroDTO filtro) {
+    public ResponseEntity<ApiResponse<Page<ProductoDTO>>> listarProductos(@Valid @RequestBody PaginacionFiltroDTO filtro) {
 
         Page<ProductoDTO> productos = productoService.listarProductos(filtro);
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", productos));
@@ -44,4 +45,9 @@ public class ProductoController {
         return ResponseEntity.ok(ApiResponse.ok(eliminacion));
     }
 
+    @PostMapping("updateProducto/{id}")
+    public ResponseEntity<ApiResponse<ProductoDTO>> listarProveedores(@PathVariable String id, @RequestBody ProductoUpdateDTO producto) {
+        ProductoDTO productoUpdate = productoService.actualizacionProducto(id, producto);
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", productoUpdate));
+    }
 }

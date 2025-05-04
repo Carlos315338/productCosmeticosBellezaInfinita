@@ -1,6 +1,7 @@
 package com.sena.productCosmeticosBellezaInfinita.controller;
 
 import com.sena.productCosmeticosBellezaInfinita.dto.ApiResponse;
+import com.sena.productCosmeticosBellezaInfinita.dto.PaginacionFiltroDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProveedorDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProveedorSelectDTO;
 import com.sena.productCosmeticosBellezaInfinita.service.ProveedorService;
@@ -11,13 +12,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("api/proveedor")
+@RequestMapping("proveedor")
 public class ProveedorController {
 
     @Autowired
@@ -29,19 +31,17 @@ public class ProveedorController {
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", proveedoresSelect));
     }
 
-    @GetMapping("/proveedores")
-    public ResponseEntity<ApiResponse<Page<ProveedorDTO>>> listarProveedores(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+    @PostMapping("/proveedores")
+    public ResponseEntity<ApiResponse<Page<ProveedorDTO>>> listarProveedores(@RequestBody PaginacionFiltroDTO filtro) {
 
-        Page<ProveedorDTO> proveedores = proveedorService.obtenerProveedores(page, size);
+        Page<ProveedorDTO> proveedores = proveedorService.obtenerProveedores(filtro);
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", proveedores));
     }
 
     @GetMapping("/cantidadProveedores")
     public ResponseEntity<ApiResponse<Long>> obtenerCantidadProveedores() {
         Long cantidadProveedores = proveedorService.obtenerCantidadProveedores();
-        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", cantidadProveedores) );
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", cantidadProveedores));
     }
 
     @DeleteMapping("/{id}")
@@ -49,4 +49,11 @@ public class ProveedorController {
         String message = proveedorService.eliminarProveedor(id);
         return ResponseEntity.ok(ApiResponse.ok(message));
     }
+
+    @PostMapping("updateProveedor/{id}")
+    public ResponseEntity<ApiResponse<ProveedorDTO>> listarProveedores(@PathVariable String id, @RequestBody ProveedorDTO proveedor) {
+        ProveedorDTO proveedorUpdate = proveedorService.actualizacionProveedor(id, proveedor);
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", proveedorUpdate));
+    }
+
 }

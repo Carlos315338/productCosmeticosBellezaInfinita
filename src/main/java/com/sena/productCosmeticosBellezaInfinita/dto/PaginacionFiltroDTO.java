@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductoFiltroDTO {
+public class PaginacionFiltroDTO {
 
     @NotNull
     private Integer page;

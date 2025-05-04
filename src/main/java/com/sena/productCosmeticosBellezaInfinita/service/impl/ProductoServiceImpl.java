@@ -10,12 +10,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.sena.productCosmeticosBellezaInfinita.dto.PaginacionFiltroDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProductoDTO;
-import com.sena.productCosmeticosBellezaInfinita.dto.ProductoFiltroDTO;
+import com.sena.productCosmeticosBellezaInfinita.dto.ProductoUpdateDTO;
+import com.sena.productCosmeticosBellezaInfinita.entity.Categoria;
 import com.sena.productCosmeticosBellezaInfinita.entity.Producto;
+import com.sena.productCosmeticosBellezaInfinita.entity.Proveedor;
 import com.sena.productCosmeticosBellezaInfinita.mapper.ProductoMapper;
+import com.sena.productCosmeticosBellezaInfinita.repository.CategoriaRepository;
 import com.sena.productCosmeticosBellezaInfinita.repository.ProductoRepository;
+import com.sena.productCosmeticosBellezaInfinita.repository.ProveedorRepository;
 import com.sena.productCosmeticosBellezaInfinita.service.ProductoService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
@@ -25,9 +32,15 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoMapper productoMapper;
-    
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private ProveedorRepository proveedorRepository;
+
     @Override
-    public Page<ProductoDTO> listarProductos(ProductoFiltroDTO filtro) {
+    public Page<ProductoDTO> listarProductos(PaginacionFiltroDTO filtro) {
 
         Sort sort = "desc".equalsIgnoreCase(filtro.getSortOrder())
                 ? Sort.by(filtro.getSortField()).descending()
@@ -64,6 +77,35 @@ public class ProductoServiceImpl implements ProductoService {
             System.out.println("Error, " + e);
             return "Error Procesando la operacion";
         }
+    }
+
+    @Override
+    public ProductoDTO actualizacionProducto(String id, ProductoUpdateDTO productoDTO) {
+        Producto existente = productoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Producto no encontrado con ID: " + id));
+
+        existente.setCodigoDeBarras(productoDTO.getCodigoDeBarras());
+        existente.setNombre(productoDTO.getNombre());
+        existente.setDescripcion(productoDTO.getDescripcion());
+        existente.setPrecio(productoDTO.getPrecio());
+        existente.setStock(productoDTO.getStock());
+
+        if (productoDTO.getCategoriaId() != null && productoDTO.getCategoriaId() != null) {
+            Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Categoría no encontrada con ID: " + productoDTO.getCategoriaId()));
+            existente.setCategoria(categoria);
+        }
+
+        if (productoDTO.getProveedorId() != null && productoDTO.getProveedorId() != null) {
+            Proveedor proveedor = proveedorRepository.findById(productoDTO.getProveedorId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Proveedor no encontrado con ID: " + productoDTO.getProveedorId()));
+            existente.setProveedor(proveedor);
+        }
+
+        Producto actualizado = productoRepository.save(existente);
+        return productoMapper.productoToProductoDTO(actualizado);
     }
 
 }

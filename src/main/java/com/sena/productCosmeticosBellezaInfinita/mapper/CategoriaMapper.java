@@ -2,9 +2,7 @@ package com.sena.productCosmeticosBellezaInfinita.mapper;
 
 import com.sena.productCosmeticosBellezaInfinita.dto.CategoriaDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.CategoriaSelectDTO;
-import com.sena.productCosmeticosBellezaInfinita.dto.ProductoDTO;
 import com.sena.productCosmeticosBellezaInfinita.entity.Categoria;
-import com.sena.productCosmeticosBellezaInfinita.entity.Producto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -16,6 +14,7 @@ import java.util.List;
 public interface CategoriaMapper {
 
     CategoriaDTO categoriaToCategoriaDTO(Categoria categoria);
+    Categoria categoriaDTOToCategoria(CategoriaDTO categoria);
 
     @Mapping(source = "idCategoria", target = "idCategoria")
     @Mapping(source = "nombreCategoria", target = "nombreCategoria")

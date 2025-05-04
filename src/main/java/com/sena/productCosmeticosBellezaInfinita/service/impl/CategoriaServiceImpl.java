@@ -13,18 +13,18 @@ import java.util.List;
 public class CategoriaServiceImpl implements CategoriaService {
 
     @Autowired
-    private CategoriaRepository proveedorRepository;
+    private CategoriaRepository categoriaRepository;
 
     @Autowired
-    private CategoriaMapper proveedorMapper;
+    private CategoriaMapper categoriaMapper;
 
     @Override
     public List<CategoriaSelectDTO> obtenerProveedoresParaSelect() {
-        return proveedorMapper.listCategoriaToCategoriaSelectDTO(proveedorRepository.findAll());
+        return categoriaMapper.listCategoriaToCategoriaSelectDTO(categoriaRepository.findAll());
     }
 
     @Override
     public Long obtenerCantidadCategoria() {
-        return proveedorRepository.count();
+        return categoriaRepository.count();
     }
 }
