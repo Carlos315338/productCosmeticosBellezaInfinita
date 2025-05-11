@@ -10,4 +10,6 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, String> {
 
     Page<Proveedor> findByNombreProveedorContainingIgnoreCase(String nombre, Pageable pageable);
 
+    boolean existsByNitProveedor(String nitProveedor);
+
 }

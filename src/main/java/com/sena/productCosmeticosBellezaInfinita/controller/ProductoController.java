@@ -50,4 +50,11 @@ public class ProductoController {
         ProductoDTO productoUpdate = productoService.actualizacionProducto(id, producto);
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", productoUpdate));
     }
+
+    @PostMapping("guardarProducto")
+    public ResponseEntity<ApiResponse<Void>> guardarProducto(@Valid @RequestBody ProductoUpdateDTO producto) {
+        productoService.guardarProducto(producto);
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa"));
+    }
+
 }

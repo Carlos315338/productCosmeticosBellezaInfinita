@@ -15,4 +15,6 @@ public interface ProductoService {
     public Long obtenerCantidadProductos();
 
     public ProductoDTO actualizacionProducto(String id, ProductoUpdateDTO productoDto);
+
+    public void guardarProducto(ProductoUpdateDTO productoDto);
 }

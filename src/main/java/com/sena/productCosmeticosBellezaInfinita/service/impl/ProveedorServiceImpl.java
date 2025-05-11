@@ -37,9 +37,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     public Page<ProveedorDTO> obtenerProveedores(PaginacionFiltroDTO filtro) {
 
-        Sort sort = "desc".equalsIgnoreCase(filtro.getSortOrder())
-                ? Sort.by(filtro.getSortField()).descending()
-                : Sort.by(filtro.getSortField()).ascending();
+        Sort sort = Sort.by(Sort.Direction.fromString(filtro.getSortOrder()), filtro.getSortField());
 
         Pageable pageable = PageRequest.of(filtro.getPage(), filtro.getSize(), sort);
 
@@ -60,13 +58,8 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     public String eliminarProveedor(String id) {
-        try {
-            proveedorRepository.deleteById(id);
-            return "Operacion Exitosa";
-        } catch (Exception e) {
-            System.out.println("Erro Eliminar Proveedor " + e);
-            return "Error al procesar la operacion";
-        }
+        proveedorRepository.deleteById(id);
+        return "Operacion Exitosa";
     }
 
     @Override
@@ -86,5 +79,22 @@ public class ProveedorServiceImpl implements ProveedorService {
 
         Proveedor actualizado = proveedorRepository.save(proveedorExistente);
         return proveedorMapper.proveedorToProveedorDTO(actualizado);
+    }
+
+    @Override
+    public void guardarProveedor(ProveedorDTO proveedorDTO) {
+
+        boolean existe = proveedorRepository.existsByNitProveedor(proveedorDTO.getNitProveedor());
+        if (existe) {
+            throw new IllegalArgumentException("Ya existe un proveedor con el NIT: " + proveedorDTO.getNitProveedor());
+        }
+
+        Proveedor proveedor = proveedorMapper.proveedorDTOToProveedor(proveedorDTO);
+        proveedorRepository.save(proveedor);
+    }
+
+    @Override
+    public boolean existeNitProveedor(String nitproveedor) {
+        return proveedorRepository.existsByNitProveedor(nitproveedor);
     }
 }

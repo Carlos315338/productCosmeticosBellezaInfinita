@@ -19,4 +19,8 @@ public interface ProveedorService {
     public Long obtenerCantidadProveedores();
 
     public ProveedorDTO actualizacionProveedor(String id, ProveedorDTO proveedor);
+
+    public void guardarProveedor(ProveedorDTO proveedor);
+
+    public boolean existeNitProveedor(String proveedor);
 }

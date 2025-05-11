@@ -5,6 +5,9 @@ import com.sena.productCosmeticosBellezaInfinita.dto.PaginacionFiltroDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProveedorDTO;
 import com.sena.productCosmeticosBellezaInfinita.dto.ProveedorSelectDTO;
 import com.sena.productCosmeticosBellezaInfinita.service.ProveedorService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -51,9 +55,21 @@ public class ProveedorController {
     }
 
     @PostMapping("updateProveedor/{id}")
-    public ResponseEntity<ApiResponse<ProveedorDTO>> listarProveedores(@PathVariable String id, @RequestBody ProveedorDTO proveedor) {
+    public ResponseEntity<ApiResponse<ProveedorDTO>> listarProveedores(@PathVariable String id,
+            @RequestBody ProveedorDTO proveedor) {
         ProveedorDTO proveedorUpdate = proveedorService.actualizacionProveedor(id, proveedor);
         return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", proveedorUpdate));
     }
 
+    @PostMapping("guardarProveedor")
+    public ResponseEntity<ApiResponse<Void>> guardarProveedor(@Valid @RequestBody ProveedorDTO proveedor) {
+        proveedorService.guardarProveedor(proveedor);
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa"));
+    }
+
+    @GetMapping("existeNitProveedor")
+    public ResponseEntity<ApiResponse<Boolean>> existeNitProveedor(@RequestParam String nit) {
+        boolean existeNit = proveedorService.existeNitProveedor(nit);
+        return ResponseEntity.ok(ApiResponse.ok("Operacion Exitosa", existeNit));
+    }
 }

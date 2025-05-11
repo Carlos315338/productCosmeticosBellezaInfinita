@@ -42,9 +42,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public Page<ProductoDTO> listarProductos(PaginacionFiltroDTO filtro) {
 
-        Sort sort = "desc".equalsIgnoreCase(filtro.getSortOrder())
-                ? Sort.by(filtro.getSortField()).descending()
-                : Sort.by(filtro.getSortField()).ascending();
+        Sort sort = Sort.by(Sort.Direction.fromString(filtro.getSortOrder()), filtro.getSortField());
 
         Pageable pageable = PageRequest.of(filtro.getPage(), filtro.getSize(), sort);
 
@@ -106,6 +104,33 @@ public class ProductoServiceImpl implements ProductoService {
 
         Producto actualizado = productoRepository.save(existente);
         return productoMapper.productoToProductoDTO(actualizado);
+    }
+
+    @Override
+    public void guardarProducto(ProductoUpdateDTO productoDto) {
+        Producto producto = new Producto();
+
+        producto.setCodigoDeBarras(productoDto.getCodigoDeBarras());
+        producto.setNombre(productoDto.getNombre());
+        producto.setDescripcion(productoDto.getDescripcion());
+        producto.setPrecio(productoDto.getPrecio());
+        producto.setStock(productoDto.getStock());
+
+        if (productoDto.getCategoriaId() != null) {
+            Categoria categoria = categoriaRepository.findById(productoDto.getCategoriaId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Categoría no encontrada con ID: " + productoDto.getCategoriaId()));
+            producto.setCategoria(categoria);
+        }
+
+        if (productoDto.getProveedorId() != null) {
+            Proveedor proveedor = proveedorRepository.findById(productoDto.getProveedorId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Proveedor no encontrado con ID: " + productoDto.getProveedorId()));
+            producto.setProveedor(proveedor);
+        }
+
+        productoRepository.save(producto);
     }
 
 }
